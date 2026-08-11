@@ -144,6 +144,7 @@ curl http://localhost:5174/api/data/api-key-data -H "X-API-Key: demo-api-key-123
 - **密码哈希**：使用 [BCrypt.Net-Next](https://github.com/BcryptNet/bcrypt.net)。
 - **未使用依赖**：`StackExchange.Redis` 已在 `AuthDemo.API.csproj` 中引用但暂未使用，预留给后续 Session/Token 存储。
 - **API 文档**：使用 [Scalar](https://github.com/scalar/scalar) 而非 Swagger UI；根路径 `/` 重定向至 `/swagger`（与 Scalar 实际路径不一致，属已知小问题）。
+- **CORS**：`Program.cs` 已配置宽松策略 `AllowAll`（任意 Origin/Method/Header），并在请求管道中 `UseCors` 置于认证之前——支持浏览器跨域调用并正确响应预检 `OPTIONS` 请求（否则会返回 405）。中间件顺序：`HttpsRedirection → UseCors → Authentication → Authorization → MapControllers`。生产环境应收紧为白名单来源。
 
 ---
 

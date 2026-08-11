@@ -67,6 +67,15 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddControllers();
 
+// CORS：演示用宽松策略（任意来源/方法/头），以便浏览器前端跨域调用并正确处理预检 OPTIONS 请求
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy => policy
+        .AllowAnyOrigin()
+        .AllowAnyHeader()
+        .AllowAnyMethod());
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -77,6 +86,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
