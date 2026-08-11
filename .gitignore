@@ -1,0 +1,23 @@
+# Build output
+**/bin/
+**/obj/
+
+# IDE / local-only
+.vs/
+.idea/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.cache
+
+# Local AI assistant context (working doc, not for the repo)
+CLAUDE.md
+
+# Secrets / environment
+.env*
+*.local
+appsettings.*.local.json
+
+# Logs
+*.log

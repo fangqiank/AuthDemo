@@ -1,0 +1,145 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 600" font-family="'Segoe UI', Arial, sans-serif">
+  <defs>
+    <linearGradient id="skyGradient" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#0ea5e9"/><stop offset="100%" stop-color="#0284c7"/></linearGradient>
+    <linearGradient id="purpleGradient" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#a855f7"/><stop offset="100%" stop-color="#7c3aed"/></linearGradient>
+    <linearGradient id="orangeGradient" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#f97316"/><stop offset="100%" stop-color="#ea580c"/></linearGradient>
+    <linearGradient id="blueGradient" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#2563eb"/></linearGradient>
+    <linearGradient id="greenGradient" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#22c55e"/><stop offset="100%" stop-color="#16a34a"/></linearGradient>
+    <marker id="arrowPurple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#a855f7"/></marker>
+    <marker id="arrowOrange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#f97316"/></marker>
+    <marker id="arrowBlue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#3b82f6"/></marker>
+    <marker id="arrowSky" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#0ea5e9"/></marker>
+    <marker id="arrowGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#16a34a"/></marker>
+  </defs>
+  <style>
+    .flow { stroke-dasharray: 8 4; animation: dash 0.5s linear infinite; }
+    .return { stroke-dasharray: 5 4; }
+    @keyframes dash { to { stroke-dashoffset: -12; } }
+    .h1 { font-size: 26px; font-weight: 700; fill: #0f172a; }
+    .sub { font-size: 14px; fill: #64748b; }
+    .ctitle { font-size: 15px; font-weight: 700; fill: #ffffff; }
+    .b { font-size: 13px; font-weight: 700; fill: #1e293b; }
+    .g { font-size: 10px; fill: #64748b; }
+    .g9 { font-size: 9px; fill: #94a3b8; }
+  </style>
+
+  <rect width="1240" height="600" fill="#ffffff"/>
+
+  <!-- Title -->
+  <text x="620" y="40" text-anchor="middle" class="h1">AuthDemo 架构图 / Architecture</text>
+  <text x="620" y="64" text-anchor="middle" class="sub">.NET 10 · JWT + API Key + Session 三层认证演示 · 3-Layer Auth Demo</text>
+
+  <!-- ===== Layer cards (y 100-330) ===== -->
+  <!-- Client (sky) x=60 -->
+  <g>
+    <rect x="60" y="100" width="230" height="230" rx="12" fill="#f0f9ff" stroke="#0ea5e9" stroke-width="2"/>
+    <path d="M60,112 a12,12 0 0 1 12,-12 h206 a12,12 0 0 1 12,12 v26 h-230 z" fill="url(#skyGradient)"/>
+    <text x="175" y="124" text-anchor="middle" class="ctitle">客户端 / Client</text>
+    <text x="175" y="168" text-anchor="middle" class="b">浏览器 · Postman · curl</text>
+    <line x1="80" y1="190" x2="270" y2="190" stroke="#bae6fd"/>
+    <text x="175" y="218" text-anchor="middle" class="g">Authorization: Bearer &#8249;token&#8250;</text>
+    <text x="175" y="240" text-anchor="middle" class="g">sessionId  /  X-API-Key</text>
+    <text x="175" y="288" text-anchor="middle" class="g9">发起请求 · 持有凭证</text>
+  </g>
+
+  <!-- API (purple) x=350 -->
+  <g>
+    <rect x="350" y="100" width="230" height="230" rx="12" fill="#faf5ff" stroke="#a855f7" stroke-width="2"/>
+    <path d="M350,112 a12,12 0 0 1 12,-12 h206 a12,12 0 0 1 12,12 v26 h-230 z" fill="url(#purpleGradient)"/>
+    <text x="465" y="124" text-anchor="middle" class="ctitle">AuthDemo.API</text>
+    <text x="364" y="166" class="b">Program.cs — 宿主/Host</text>
+    <text x="364" y="184" class="g">AuthN(JWT) → AuthZ 管道</text>
+    <text x="364" y="212" class="g">— Controllers —</text>
+    <text x="364" y="234" class="b">AuthController</text>
+    <text x="364" y="250" class="g9">login · refresh · api-key · validate</text>
+    <text x="364" y="276" class="b">DataController</text>
+    <text x="364" y="292" class="g9">public · protected · admin · session</text>
+    <text x="364" y="316" class="g9">[Authorize] / [Authorize(Roles)]</text>
+  </g>
+
+  <!-- Infrastructure (orange) x=640 -->
+  <g>
+    <rect x="640" y="100" width="230" height="230" rx="12" fill="#fff7ed" stroke="#f97316" stroke-width="2"/>
+    <path d="M640,112 a12,12 0 0 1 12,-12 h206 a12,12 0 0 1 12,12 v26 h-230 z" fill="url(#orangeGradient)"/>
+    <text x="755" y="124" text-anchor="middle" class="ctitle">AuthDemo.Infrastructure</text>
+    <text x="654" y="176" class="b">AuthService</text>
+    <text x="654" y="194" class="g">用户名/密码 BCrypt 验证</text>
+    <text x="654" y="210" class="g">API Key · Session 查询</text>
+    <text x="654" y="240" class="b">JwtService</text>
+    <text x="654" y="258" class="g">签发/验证 Access Token (HS256)</text>
+    <text x="654" y="274" class="g">Refresh Token 生成与轮换</text>
+    <text x="654" y="312" class="g9">业务逻辑层 · 无数据库依赖</text>
+  </g>
+
+  <!-- Core (blue) x=930 -->
+  <g>
+    <rect x="930" y="100" width="230" height="230" rx="12" fill="#eff6ff" stroke="#3b82f6" stroke-width="2"/>
+    <path d="M930,112 a12,12 0 0 1 12,-12 h206 a12,12 0 0 1 12,12 v26 h-230 z" fill="url(#blueGradient)"/>
+    <text x="1045" y="124" text-anchor="middle" class="ctitle">AuthDemo.Core</text>
+    <text x="944" y="176" class="b">User 实体</text>
+    <text x="944" y="194" class="g">Id · Username · Roles</text>
+    <text x="944" y="210" class="g">PasswordHash · ApiKey</text>
+    <text x="944" y="240" class="b">AuthModels (DTO)</text>
+    <text x="944" y="258" class="g">Login / Token / Refresh</text>
+    <text x="944" y="286" class="b">JwtSettings (配置)</text>
+    <text x="944" y="314" class="g9">领域模型 · 零依赖</text>
+  </g>
+
+  <!-- ===== Flow arrows between layers (y=215) ===== -->
+  <!-- Client -> API -->
+  <path d="M290,215 L348,215" stroke="#e9d5ff" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <path d="M290,215 L346,215" class="flow" stroke="#a855f7" stroke-width="3" fill="none" marker-end="url(#arrowPurple)" stroke-linecap="round"/>
+  <!-- API -> Infra -->
+  <path d="M580,215 L638,215" stroke="#fed7aa" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <path d="M580,215 L636,215" class="flow" stroke="#f97316" stroke-width="3" fill="none" marker-end="url(#arrowOrange)" stroke-linecap="round"/>
+  <!-- Infra -> Core -->
+  <path d="M870,215 L928,215" stroke="#bfdbfe" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <path d="M870,215 L926,215" class="flow" stroke="#3b82f6" stroke-width="3" fill="none" marker-end="url(#arrowBlue)" stroke-linecap="round"/>
+
+  <!-- Token return arc (API -> Client) -->
+  <path d="M465,100 C 465,66 175,66 175,98" class="return" stroke="#0ea5e9" stroke-width="2.5" fill="none" marker-end="url(#arrowSky)"/>
+  <text x="320" y="60" text-anchor="middle" class="g" fill="#0284c7">Access + Refresh Token 响应</text>
+
+  <!-- Dependency note -->
+  <text x="620" y="350" text-anchor="middle" class="g9">依赖方向 Dependency:  API  →  Infrastructure  →  Core     （请求/调用同向流动）</text>
+
+  <!-- ===== In-memory stores (under Infrastructure) ===== -->
+  <g>
+    <rect x="640" y="378" width="230" height="44" rx="8" fill="#f0fdf4" stroke="#22c55e" stroke-width="1.5"/>
+    <text x="755" y="396" text-anchor="middle" class="b" fill="#15803d">Users（静态列表）</text>
+    <text x="755" y="412" text-anchor="middle" class="g9">admin · user  + BCrypt 哈希</text>
+    <rect x="640" y="432" width="230" height="44" rx="8" fill="#f0fdf4" stroke="#22c55e" stroke-width="1.5"/>
+    <text x="755" y="450" text-anchor="middle" class="b" fill="#15803d">RefreshTokens（静态字典）</text>
+    <text x="755" y="466" text-anchor="middle" class="g9">userId → refreshToken</text>
+    <!-- dashed links up to Infra card -->
+    <path d="M700,378 L700,342" class="return" stroke="#22c55e" stroke-width="1.5" fill="none"/>
+    <path d="M810,378 L810,342" class="return" stroke="#22c55e" stroke-width="1.5" fill="none"/>
+  </g>
+
+  <!-- ===== Auth flow panel (bottom-left) ===== -->
+  <g>
+    <rect x="50" y="378" width="510" height="178" rx="10" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5"/>
+    <text x="66" y="402" class="b">认证流程 / Auth Flow</text>
+    <line x1="66" y1="410" x2="544" y2="410" stroke="#e2e8f0"/>
+    <text x="66" y="432" class="g"><tspan fill="#7c3aed" font-weight="700">① 登录</tspan>  POST /api/auth/login → AuthService(BCrypt) → JwtService 签发 Access+Refresh</text>
+    <text x="66" y="456" class="g"><tspan fill="#7c3aed" font-weight="700">② 受保护访问</tspan>  携带 Bearer Token → JWT 中间件验签 → [Authorize] 放行</text>
+    <text x="66" y="480" class="g"><tspan fill="#7c3aed" font-weight="700">③ 刷新</tspan>  POST /api/auth/refresh → 校验 RefreshToken → 签发新令牌对</text>
+    <text x="66" y="504" class="g"><tspan fill="#7c3aed" font-weight="700">④ 其他模式</tspan>  API Key 换令牌 · sessionId 会话 · 角色授权</text>
+    <text x="66" y="534" class="g9">注：用户与令牌存储于内存静态集合，重启即失；仅用于演示。</text>
+  </g>
+
+  <!-- ===== Legend (bottom-right) ===== -->
+  <g>
+    <rect x="900" y="378" width="300" height="178" rx="10" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5"/>
+    <text x="916" y="402" class="b">图例 / Legend</text>
+    <line x1="916" y1="410" x2="1184" y2="410" stroke="#e2e8f0"/>
+    <rect x="916" y="422" width="16" height="12" rx="3" fill="url(#skyGradient)"/><text x="940" y="432" class="g">客户端 Client</text>
+    <rect x="916" y="444" width="16" height="12" rx="3" fill="url(#purpleGradient)"/><text x="940" y="454" class="g">接口层 API（控制器/管道）</text>
+    <rect x="916" y="466" width="16" height="12" rx="3" fill="url(#orangeGradient)"/><text x="940" y="476" class="g">服务层 Infrastructure</text>
+    <rect x="916" y="488" width="16" height="12" rx="3" fill="url(#blueGradient)"/><text x="940" y="498" class="g">领域层 Core（模型）</text>
+    <rect x="916" y="510" width="16" height="12" rx="3" fill="url(#greenGradient)"/><text x="940" y="520" class="g">内存存储 In-memory</text>
+    <line x1="1060" y1="428" x2="1100" y2="428" class="flow" stroke="#94a3b8" stroke-width="3" marker-end="url(#arrowOrange)"/><text x="1110" y="432" class="g">调用/依赖</text>
+    <line x1="1060" y1="450" x2="1100" y2="450" class="return" stroke="#0ea5e9" stroke-width="2"/><text x="1110" y="454" class="g">令牌响应</text>
+    <text x="916" y="540" class="g9">静态查看需用浏览器打开 .svg（GitHub 不播放动画）</text>
+  </g>
+</svg>

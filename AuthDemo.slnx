@@ -1,0 +1,7 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="AuthDemo.API/AuthDemo.API.csproj" />
+    <Project Path="AuthDemo.Core/AuthDemo.Core.csproj" />
+    <Project Path="AuthDemo.Infrastructure/AuthDemo.Infrastructure.csproj" />
+  </Folder>
+</Solution>
