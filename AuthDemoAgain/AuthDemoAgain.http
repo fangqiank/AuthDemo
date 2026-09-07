@@ -1,0 +1,31 @@
+@AuthDemoAgain_HostAddress = http://localhost:5133
+
+### GitHub OAuth（无法在此测试：是 302 重定向流程，请在浏览器打开 https://localhost:7035/api/auth/github-login）
+POST {{AuthDemoAgain_HostAddress}}/api/auth/login
+Content-Type: application/json
+
+{ "username": "admin", "password": "admin123" }
+
+### 登录 user（User 角色，Sales 部门）
+POST {{AuthDemoAgain_HostAddress}}/api/auth/login
+Content-Type: application/json
+
+{ "username": "user", "password": "user123" }
+
+### profile（RBAC: User 或 Admin）
+GET {{AuthDemoAgain_HostAddress}}/api/auth/profile
+
+### admin-data（RBAC: 仅 Admin）
+GET {{AuthDemoAgain_HostAddress}}/api/auth/admin-data
+
+### abac-data（ABAC: 仅 department=IT，用 user 登录则 403）
+GET {{AuthDemoAgain_HostAddress}}/api/auth/abac-data
+
+### 登出
+POST {{AuthDemoAgain_HostAddress}}/api/auth/logout
+
+### 文档列表（资源型授权：只返回 Owner==当前用户的；需先登录）
+GET {{AuthDemoAgain_HostAddress}}/api/documents
+
+### 单个文档（Owner 才 200，否则 403）
+GET {{AuthDemoAgain_HostAddress}}/api/documents/weekly-report
