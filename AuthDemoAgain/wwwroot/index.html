@@ -73,15 +73,19 @@
 const $ = id => document.getElementById(id);
 
 async function refresh() {
-  const r = await fetch('/api/auth/me');
-  const me = r.status === 204 ? null : await r.json();   // Ok(null) → 204 空体
-  if (me) {
-    $('who').textContent = `${me.name}（${me.role} / ${me.department}）`;
-    $('login').hidden = true; $('tests').hidden = false; $('logout').hidden = false;
-  } else {
-    $('who').textContent = '未登录';
-    $('login').hidden = false; $('tests').hidden = true; $('logout').hidden = true;
-    $('out').textContent = '点击按钮测试端点…';
+  try {
+    const r = await fetch('/api/auth/me');
+    const me = r.status === 204 ? null : await r.json();   // Ok(null) → 204 空体
+    if (me) {
+      $('who').textContent = `${me.name}（${me.role} / ${me.department}）`;
+      $('login').hidden = true; $('tests').hidden = false; $('logout').hidden = false;
+    } else {
+      $('who').textContent = '未登录';
+      $('login').hidden = false; $('tests').hidden = true; $('logout').hidden = true;
+      $('out').textContent = '点击按钮测试端点…';
+    }
+  } catch {
+    $('who').textContent = '服务不可达';
   }
 }
 

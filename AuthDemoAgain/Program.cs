@@ -28,6 +28,7 @@ builder.Services.AddAuthentication(options =>
     {
         options.LoginPath = "/api/auth/login";
         options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;   // Cookie 仅走 HTTPS
     })
     .AddGitHub(options =>
     {
@@ -35,17 +36,12 @@ builder.Services.AddAuthentication(options =>
             ?? throw new InvalidOperationException("缺少 GitHub:ClientId，请先执行 dotnet user-secrets set \"GitHub:ClientId\" <你的ClientId>");
         options.ClientSecret = builder.Configuration["GitHub:ClientSecret"]
             ?? throw new InvalidOperationException("缺少 GitHub:ClientSecret，请先执行 dotnet user-secrets set \"GitHub:ClientSecret\" <你的ClientSecret>");
-        options.CallbackPath = "/signin-github";
 
         // GitHub 身份 → 补齐与本地登录相同的 claims（默认 Role/department），
         // 使现有 RBAC/ABAC 端点对 OAuth 用户直接生效。
         options.Events.OnCreatingTicket = ctx =>
         {
-            if (ctx.Principal?.Identity is ClaimsIdentity identity)
-            {
-                identity.AddClaim(new Claim(ClaimTypes.Role, "User"));
-                identity.AddClaim(new Claim("department", "General"));
-            }
+            EnsureDefaultClaims(ctx.Principal);
             return Task.CompletedTask;
         };
     })
@@ -54,14 +50,12 @@ builder.Services.AddAuthentication(options =>
     .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
     {
         options.Authority = builder.Configuration["Keycloak:Authority"]
-            ?? throw new InvalidOperationException("缺少 Keycloak:Authority（形如 http://192.168.1.138:8080/realms/<realm>）");
+            ?? throw new InvalidOperationException("缺少 Keycloak:Authority（形如 http://<keycloak-host>:8080/realms/<realm>）");
         options.ClientId = builder.Configuration["Keycloak:ClientId"]
             ?? throw new InvalidOperationException("缺少 Keycloak:ClientId");
         options.ClientSecret = builder.Configuration["Keycloak:ClientSecret"]
             ?? throw new InvalidOperationException("缺少 Keycloak:ClientSecret（Keycloak 客户端需开启 Client authentication）");
         options.ResponseType = OpenIdConnectResponseType.Code;   // Authorization Code 流程
-        options.CallbackPath = "/signin-oidc";
-        options.GetClaimsFromUserInfoEndpoint = true;
         options.TokenValidationParameters = new TokenValidationParameters
         {
             NameClaimType = "preferred_username"                 // Keycloak 用户名字段
@@ -71,14 +65,20 @@ builder.Services.AddAuthentication(options =>
         // 与 GitHub 相同：补默认 claims，使现有 RBAC/ABAC 端点对 OIDC 用户生效
         options.Events.OnTokenValidated = ctx =>
         {
-            if (ctx.Principal?.Identity is ClaimsIdentity identity)
-            {
-                identity.AddClaim(new Claim(ClaimTypes.Role, "User"));
-                identity.AddClaim(new Claim("department", "General"));
-            }
+            EnsureDefaultClaims(ctx.Principal);
             return Task.CompletedTask;
         };
     });
+
+    // GitHub / OIDC 登录共用：外部身份默认补 User 角色 + General 部门
+    static void EnsureDefaultClaims(ClaimsPrincipal? principal)
+    {
+        if (principal?.Identity is ClaimsIdentity identity)
+        {
+            identity.AddClaim(new Claim(ClaimTypes.Role, "User"));
+            identity.AddClaim(new Claim("department", "General"));
+        }
+    }
 
 // 2. 配置鉴权 (Authorization): 回答“你能去哪”
 // 采用 RBAC，通过 Policy (策略) 将 Role 转化为权限控制点。
@@ -110,12 +110,12 @@ if (app.Environment.IsDevelopment())
 app.UseDefaultFiles();   // wwwroot/index.html 作为站点首页
 app.UseStaticFiles();    // 托管 SPA（wwwroot 下静态文件默认匿名可访问）
 
+app.UseHttpsRedirection();   // 放在认证前：http 请求先升级 https，避免 Cookie 先经明文连接
+
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
-app.UseHttpsRedirection();
 
 app.Run();
 

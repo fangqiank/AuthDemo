@@ -16,8 +16,8 @@ namespace AuthDemoAgain.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
-           var user = MockUserStore.Users.FirstOrDefault(u => u.Username == request.Username 
-            && u.Password == request.Password);
+           var user = MockUserStore.Users.FirstOrDefault(u => u.Username == request.Username
+            && MockUserStore.Verify(u, request.Password));
             if (user == null)
             {
                 return Unauthorized(new { message = "Invalid username or password" });
@@ -64,6 +64,8 @@ namespace AuthDemoAgain.Controllers
             => Challenge(new AuthenticationProperties { RedirectUri = "/" },
                 OpenIdConnectDefaults.AuthenticationScheme);
 
+        // 仅销毁本地 Cookie；Keycloak/GitHub 的 SSO 会话仍在，再次登录会静默重连。
+        // 完整单点登出需 SaveTokens + IdP end_session 重定向（涉及 SPA 流程与 Keycloak 注销回调配置）。
         [HttpPost("logout")]
         public async Task<IActionResult> Logout()
         {

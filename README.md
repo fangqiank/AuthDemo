@@ -92,4 +92,4 @@ Challenge 之后 OIDC 方案独有的一段：Keycloak 不直接给 token，而�
 
 ## 免责
 
-仅供教学演示：用户存内存 `MockUserStore`、密码明文、无 HTTPS 强化、无速率限制——勿用于生产。
+仅供教学演示：用户存内存 `MockUserStore`、密码 PBKDF2 固定盐哈希（真实系统应随机盐入库）、无速率限制——勿用于生产。
